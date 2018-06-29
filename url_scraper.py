@@ -10,7 +10,7 @@ fh = open("ebook-list.txt","a");
 for letter in letters:
 
     pagenum = 1;
-    N = 1000;
+    N = 1;
 
     while(pagenum<=N):
         print("let: "+letter+", page n: " + str(pagenum) + " of " + str(N));
