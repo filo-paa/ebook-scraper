@@ -2,14 +2,19 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import os.path
+import time
 
-elist = open("ebook_list.txt","r");
+elist = open("ebook-uniq.txt","r");
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
 for url in elist:
-    
-    url = url.strip() + '2/';  
-    response = requests.get(url, headers=headers) 
+
+    url = url.strip() + '2/';
+    try:
+        response = requests.get(url, headers=headers)
+    except:
+        print("error, could not retrive, continue.");
+        continue;
     html = response.content;
     soup = BeautifulSoup(html, 'html.parser');
 
@@ -19,17 +24,17 @@ for url in elist:
     except:
         print("error: exeption: " + url);
         continue;
-    
+
     response = requests.get(download, headers=headers);
-    fname = "dwnlg/"+download.split("/")[-1];          
+    fname = "dwnlg/"+download.split("/")[-1];
     print("saving " + fname + "...",end="");
 
     if os.path.isfile(fname):
         print("exists");
         continue
-    
+
     file = open(fname,"wb")
     file.write(response.content);
     file.close();
     print("new! saved");
-    
+    time.sleep(1);
