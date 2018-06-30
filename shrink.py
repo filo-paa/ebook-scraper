@@ -1,5 +1,5 @@
-infilename = "ebook-list.txt"
-outfilename = "ebook-uniq.txt"
+infilename = "ebook-list-authors.txt"
+outfilename = "ebook-list-authors-shrunk.txt"
 
 lines_seen = set() # holds lines already seen
 outfile = open(outfilename, "w")
