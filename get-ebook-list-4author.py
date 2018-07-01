@@ -4,7 +4,9 @@ import re
 import os.path
 import string
 
-#script takes in author list and create subfolder for each actor with each a single file with ebook list of link
+## Script Number 2
+# script takes in author list and create subfolders for each author
+# with a single file inside with all ebook links for that author
 
 main_filename = "ebook-list-authors.txt";
 
@@ -16,15 +18,15 @@ num_lines = sum(1 for line in open(main_filename));
 x = 0;
 
 for line in fh_in:
-    pagenum = 1;
-    x = x + 1;
+    pagenum = 1; #pagenum starts with 1 and is incremented if a span with "Pagina 1 di 12" is found and assigned 12, see line 54
+    x = x + 1; # x is the line number (to track number of authors out of the total ones scraped)
     N = 1;
-    name = line.split("tag")[1].strip("/").strip();
+    name = line.split("tag")[1].strip("/").strip(); #author's name from url
     author_path = "authors/"+name;
     print("\n >> m of N: " + str(x) + " of "+ str(num_lines) + ", AUTHOR: " + name ,end=" ");
     if not (os.path.isdir(author_path)):
-        os.mkdir(author_path);
-    else: continue;
+        os.mkdir(author_path); #make dir if not existing
+    else: continue; #if exist skip
     fh_out = open(author_path + "/ebook-list.txt","w");
     c = 0;
     while(pagenum<=N):
@@ -49,10 +51,12 @@ for line in fh_in:
                     c = c + 1;
         if (pagenum == 1):
             try:
+                #i cant know prior to this line if the document has this span or not
+                #so try to get it, if it's there overwrite N with max number of pages
                 N = int(soup.findAll("span", {"class": "pages"})[0].text.split("di")[1]);
             except:
                 print("[!] cannot find more than 1 page. break.")
-                break;
+                break; #otherwise it means it's only one page, so break.
         pagenum = pagenum + 1;
     print("added " + str(c) + " books to author");
     fh_out.close();
